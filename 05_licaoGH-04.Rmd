@@ -1,0 +1,451 @@
+---
+title: "Lição Github Nº 6"
+subtitle: "Construindo gráficos com ggplot"
+author: "Luis Fernando dos Santos de Brito"
+date: "(06/09/2021)"
+output: 
+  html_notebook:
+    toc: yes
+    toc_float: yes
+    hightlight: tango
+    library: (readr)
+---
+
+
+## 1. Introdução
+
+- *Nesse projeto vou criar seis tipos de gráficos para representar os dados dos dataset de uma forma simples de conpreeder os dados do dataset.*
+
+- *O dataset dados_co2 foi escolhido, pois já tinha trabalhado com esse dataset então foi mais simples para enteder.*
+
+- *O dataset notas_disciplina foi escolhido, pois o dataset parecia muito simples para entender é contém poucos dados.*
+
+### 2. carregar o "tidyverse"
+
+- carregar o tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+
+### 3. lendo dados
+
+```{r}
+co2_tidy <- read.csv ("dados/co2_tidy.csv")
+
+co2_tidy
+
+notas_tidy <- read.csv("dados/notas_tidy.csv")
+
+notas_tidy
+```
+
+### 1. Gráficos de Pontos:
+
+#### 1º Camada *Dataset* (co2_tidy)
+
+- carregando o conjunto do dataset co2_tidy
+
+```{r}
+co2_tidy
+```
+
+#### 2º Camada *group_by* (agrupamento de linha)
+
+- Agrupando os dados da coluna ano.
+
+```{r}
+co2_tidy %>%
+  group_by(ano)
+```
+
+#### 3º Camada *summarise* (resumir)
+
+- Resumindo os dados ppm em media 
+
+```{r}
+co2_tidy %>%
+  group_by(ano) %>%
+  summarise(media = round(mean(ppm), 2))
+```
+
+#### 4º Camada *ggplot* (co2_tidy)
+
+- Carregando o conjunto de dados.
+
+```{r}
+co2_tidy %>%
+  group_by(ano) %>%
+  summarise(media = round(mean(ppm), 2)) %>%
+  ggplot()
+```
+
+#### 5º Camada *aes* (estética)
+
+- Carregando a camada estética geral.
+
+```{r}
+co2_tidy %>%
+  group_by(ano) %>%
+  summarise(media = round(mean(ppm), 2)) %>%
+  ggplot() +
+    aes( x = ano, y = media )
+```
+
+#### 6º Camada *geom_point* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+co2_tidy %>%
+  group_by(ano) %>%
+  summarise(media = round(mean(ppm), 2)) %>%
+  ggplot() +
+    aes( x = ano, y = media ) +
+    geom_point( color = "blue")
+```
+
+#### 7º Camada *labs* (titulo)
+
+- Acrescentando o titulo ao gráfico.
+
+```{r}
+co2_tidy %>%
+  group_by(ano) %>%
+  summarise(media = round(mean(ppm), 2)) %>%
+  ggplot() +
+    aes( x = ano, y = media ) +
+    geom_point( color = "blue") +
+  labs(
+    title = "Panorama entre tempo e media de concetração de co2",
+  )
+```
+### Resposta: *O gráfico de pontos está monstrando que: medida quer os anos passa a media da concetração de co2 continua aumentando.*
+
+
+### 2. Gráfico de Linhas:
+
+#### 1º Camada *Dataset* (co2_tidy)
+
+- carregando o conjunto do dataset co2_tidy
+
+```{r}
+co2_tidy
+```
+
+#### 2º Camada *group_by* ( agrupamento de linha)
+
+- Agrupando os dados da coluna ano
+
+```{r}
+co2_tidy %>% 
+  group_by(ano)
+```
+
+#### 3º Camada *summarise* (resumir)
+
+- Resumindo os dados ppm em media 
+
+```{r}
+co2_tidy %>% 
+  group_by(ano) %>% 
+  summarise(
+    media = round(sd(ppm), 1)
+  )
+```
+
+#### 4º Camada *ggplot* (co2_tidy)
+
+- Carregando o conjunto de dados;
+- Carregando a camada estética geral.
+
+```{r}
+co2_tidy %>% 
+  group_by(ano) %>% 
+  summarise(
+    media = round(sd(ppm), 1)
+  ) %>% 
+  ggplot(aes(x = ano, y = media, group = 1))
+```
+
+#### 5º Camada *geom_line* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+co2_tidy %>% 
+  group_by(ano) %>% 
+  summarise(
+    media = round(sd(ppm), 1)
+  ) %>% 
+  ggplot(aes(x = ano, y = media, group = 1)) +
+  geom_line(color = "#BF616A", size = 1)
+```
+
+#### 6º Camada *labs* (titulo, rotulo)
+
+- Acrescentando o titulo e o rotulo ao gráfico.
+
+```{r}
+co2_tidy %>% 
+  group_by(ano) %>% 
+  summarise(
+    media = round(sd(ppm), 1)
+  ) %>% 
+  ggplot(aes(x = ano, y = media, group = 1)) +
+  geom_line(color = "#BF616A", size = 1) +
+  labs(
+    title = "Gráfico de Linhas da concetração de co2",
+    x = "",
+    y = "Desvio Padrão da concetração de co2"
+  )
+```
+
+#### 7º Camada *theme_minimal* (tema)
+
+- Colocando uma tema adequado aos aspectos gráficos.
+
+```{r}
+co2_tidy %>% 
+  group_by(ano) %>% 
+  summarise(
+    media = round(sd(ppm), 1)
+  ) %>% 
+  ggplot(aes(x = ano, y = media, group = 1)) +
+  geom_line(color = "#BF616A", size = 1) +
+  labs(
+    title = "Gráfico de Linhas da concetração de co2",
+    x = "",
+    y = "Desvio Padrão da concetração de co2"
+  ) +
+  theme_minimal()
+```
+### Resposta: *Como podemos ver no gráfico de pontos a medida que o tempo passa a concetração de co2 aumenta, já no gráfico de linha, a medida que o tempo passa, o desvio padão monstra quanto a média da concetração de co2 está distante da própria média.*
+
+
+### 3. Gráficos de colunas ou barras:
+
+#### 1º Camada *Dataset* (notas_tidy)
+
+- carregando o conjunto do dataset notas_tidy.
+
+```{r}
+notas_tidy
+```
+
+#### 2º Camada *count* (contagem)
+
+- Fazendo a contagem dos diferentes dados.
+
+```{r}
+notas_tidy %>% 
+  count(Curso)
+```
+
+#### 3º Camada *ggplot* (notas_tidy)
+
+- Carregando o conjunto de dados;
+- Carregando a camada estética geral.
+
+```{r}
+notas_tidy %>% 
+  count(ano, ppm) %>%  
+  ggplot(aes(x = ano, y = ppm , color = ppm))
+```
+
+#### 4º Camada *geom_col* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+notas_tidy %>% 
+  count(ano, ppm) %>%  
+  ggplot(aes(x = ano, y = ppm , color = ppm)) +
+  geom_col() 
+```
+
+### Resposta: *O gráfico  de colunas está relancinado as médias das notas durantes os 11 anos descritos no dataset.*
+
+
+### 4. Histograma:
+
+#### 1º Camada *Dataset* (notas_tidy)
+
+- carregando o conjunto do dataset notas_tidy.
+
+```{r}
+notas_tidy
+```
+
+#### 2º Camada *ggplot* (notas_tidy)
+
+- Carregando o conjunto de dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot()
+```
+
+#### 3º Camada *aes* (estética)
+
+- Carregando a camada estética geral.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm)
+```
+
+#### 4º Camada *geom_histogram* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm) +
+  geom_histogram(fill = "blue", color = "red", binwidth = 1)
+```
+
+#### 5º Camada *labs* (titulo, rotulo)
+
+- Acrescentando o titulo e o rotulo ao gráfico.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm) +
+  geom_histogram(fill = "blue", color = "red", binwidth = 1) +
+  labs(
+    title = "Histograma das Notas",
+    x = "Notas",
+    y = ""
+  )
+```
+
+#### 6º Camada *theme_minimal* (tema)
+
+- Colocando uma tema adequado aos aspectos gráficos.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm) +
+  geom_histogram(fill = "blue", color = "red", binwidth = 1) +
+  labs(
+    title = "Histograma das Notas",
+    x = "Notas",
+    y = ""
+  ) +
+  theme_minimal()
+```
+### Resposta:*O histograma acima representa as média das notas das duas disciplinas juntas.*
+
+
+### 5. Gráficos de densidade 
+
+#### 1º Camada *Dataset* (notas_tidy)
+
+- carregando o conjunto do dataset notas_tidy.
+
+```{r}
+notas_tidy
+```
+
+#### 2º Camada *ggplot* (notas_tidy)
+
+- Carregando o conjunto de dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot()
+```
+
+#### 3º Camada *aes* (estética)
+
+- Carregando a camada estética geral.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm)
+```
+
+#### 4º Camada *geom_density* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm) +
+  geom_density(aes(fill = Curso), alpha = 0.3)
+```
+
+#### 5º Camada *scale_fill_viridis_d (escala de cores)
+
+- Carregando um conjunto de cores para ajudar na visualização de pessoas com dificuldade de visão ou daltonismo.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ppm) +
+  geom_density(aes(fill = Curso), alpha = 0.3) +
+  scale_fill_viridis_d()
+```
+### Resposta:*O gráfico de densidade acima, está comparando as médias dos dois cursos durante todos os anos.*
+
+
+### 6. Boxplot:
+
+#### 1º Camada *Dataset* (nota_tidy)
+
+- carregando o conjunto do dataset nota_tidy.
+
+```{r}
+notas_tidy
+```
+
+#### 2º Camada *ggplot* (notas_tidy)
+
+- Carregando o conjunto de dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot()
+```
+
+#### 3º Camada *aes* (estética)
+
+- Carregando a camada estética geral.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ano, y= ppm)
+```
+
+#### 4º Camada *geom_boxplot* (geometria)
+
+- Camada da geometria dos dados.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ano, y= ppm) +
+  geom_boxplot(aes(fill = ano), show.legend = FALSE)
+```
+
+#### 5º Camada *scale_fill_viridis_d*(escala de cores)
+
+- Carregando um conjunto de cores para ajudar na visualização de pessoas com dificuldade de visão ou daltonismo.
+
+```{r}
+notas_tidy %>% 
+  ggplot() +
+  aes(x = ano, y= ppm) +
+  geom_boxplot(aes(fill = ano), show.legend = FALSE) +
+  scale_fill_viridis_d()
+```
+### Resposta: *O boxplot representa as notas dos cursos ao se passa dos anos.*
