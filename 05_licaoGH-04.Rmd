@@ -305,7 +305,7 @@ notas_tidy %>%
 notas_tidy %>% 
   ggplot() +
   aes(x = ppm) +
-  geom_histogram(fill = "blue", color = "red", binwidth = 1)
+  geom_histogram(fill = "blue", color = "red")
 ```
 
 #### 5º Camada *labs* (titulo, rotulo)
@@ -316,9 +316,9 @@ notas_tidy %>%
 notas_tidy %>% 
   ggplot() +
   aes(x = ppm) +
-  geom_histogram(fill = "blue", color = "red", binwidth = 1) +
+  geom_histogram(fill = "blue", color = "red") +
   labs(
-    title = "Histograma das Notas",
+    title = "Histograma das pesos",
     x = "Notas",
     y = ""
   )
@@ -332,9 +332,9 @@ notas_tidy %>%
 notas_tidy %>% 
   ggplot() +
   aes(x = ppm) +
-  geom_histogram(fill = "blue", color = "red", binwidth = 1) +
+  geom_histogram(fill = "blue", color = "red") +
   labs(
-    title = "Histograma das Notas",
+    title = "Histograma das pesos",
     x = "Notas",
     y = ""
   ) +
@@ -449,3 +449,7 @@ notas_tidy %>%
   scale_fill_viridis_d()
 ```
 ### Resposta: *O boxplot representa as notas dos cursos ao se passa dos anos.*
+
+
+
+
